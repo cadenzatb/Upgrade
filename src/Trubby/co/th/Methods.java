@@ -106,7 +106,7 @@ public class Methods {
 				
 				
 				/** FAILED UPGRADE **/
-				if(Upgrade.chance.getChance(oldUp)){
+				if(!Upgrade.chance.getChance(oldUp)){
 					
 					p.playSound(p.getLocation(), Sound.ANVIL_LAND, 0.7f, 0.7f);
 					p.playSound(p.getLocation(), Sound.ITEM_BREAK, 1f, 1f);
