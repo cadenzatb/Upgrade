@@ -17,15 +17,14 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class Upgrade extends JavaPlugin implements Listener{
 
 	public static Upgrade instance;
+	public static Chance chance;
 	public boolean debug_mode = false;
 	public ItemStack accept_anvil = new ItemStack(Material.ANVIL);
 	
 	public static ArrayList<String> upgrading = new ArrayList<>();
 	
 	/**
-	 * 
-	 * [[[[[[[[	ENABLE ]]]]]]]]
-	 * 
+	 *	 >>>>>>>>	ENABLE	 <<<<<<<<
 	 */
 	
 	@Override
@@ -37,13 +36,12 @@ public class Upgrade extends JavaPlugin implements Listener{
 		accept_anvil.setItemMeta(im);
 		
 		instance = this;
+		chance = new Chance();
 	}
 	
 	
 	/**
-	 * 
-	 * [[[[[[[[	COMMANDS ]]]]]]]]
-	 * 
+	 * 	>>>>>>>>	COMMANDS	 <<<<<<<<
 	 */
 	
 	@Override
@@ -54,12 +52,6 @@ public class Upgrade extends JavaPlugin implements Listener{
 			if(label.equalsIgnoreCase("up")){
 				
 				Player p = (Player) sender;
-				
-				//Create Furnace Inventory
-				//Inventory inv = Bukkit.getServer().createInventory(null, InventoryType.FURNACE, ChatColor.RED + "" + ChatColor.BOLD + "UPGRADE " + ChatColor.BLACK + "WEAPON/ARMOR");
-				
-				//Open Inv.
-				//p.openInventory(inv);
 				
 				Methods.openFurnace(p);
 				

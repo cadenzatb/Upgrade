@@ -3,6 +3,7 @@ package Trubby.co.th;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Furnace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -35,8 +36,12 @@ public class InvListeners implements Listener{
 				if(e.getInventory().getItem(0).getType() == Material.IRON_SWORD && e.getInventory().getItem(1).getType() == Material.EMERALD){
 					
 					Furnace furnace = (Furnace) e.getInventory().getHolder();
+					
+					/** UPGRADE TASK **/
 					@SuppressWarnings("unused")
 					BukkitTask task = new EffectTask(furnace, e.getInventory(), p).runTaskTimer(Upgrade.instance, 2, 2);
+					
+					p.playSound(p.getLocation(), Sound.ANVIL_USE, 0.6f, 1f);
 					
 					Upgrade.upgrading.add(p.getName());
 					

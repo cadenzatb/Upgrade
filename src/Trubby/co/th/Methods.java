@@ -27,7 +27,8 @@ public class Methods {
 		//open
 		player.openFurnace(furnace);
 	}
-
+	
+	@SuppressWarnings("deprecation")
 	public static void checkReady(final Inventory inv, final Player p){
 		
 		//if NULL
@@ -103,6 +104,19 @@ public class Methods {
 					oldUp = oldUp + Integer.parseInt(is.getItemMeta().getDisplayName().split(ChatColor.YELLOW + "")[1].replace("+", "").replace(" ", ""));
 				}
 				
+				
+				/** FAILED UPGRADE **/
+				if(Upgrade.chance.getChance(oldUp)){
+					
+					p.playSound(p.getLocation(), Sound.ANVIL_LAND, 0.7f, 0.7f);
+					p.playSound(p.getLocation(), Sound.ITEM_BREAK, 1f, 1f);
+					
+					p.sendMessage(ChatColor.RED + "FAILED UPGRADE! " + is.getItemMeta().getDisplayName());
+					return null;
+				}
+				
+				
+				/** SUCCESSFUL UPGRADE **/
 				//Get damage lore line
 				String text = null;
 				int time = -1;
@@ -141,9 +155,10 @@ public class Methods {
 				//Done
 				is.setItemMeta(im);
 				
-				p.playSound(p.getLocation(), Sound.ANVIL_USE, 1f, 1f);
+				p.playSound(p.getLocation(), Sound.LEVEL_UP, 1f, 1f);
+				p.playSound(p.getLocation(), Sound.ANVIL_LAND, 0.7f, 1f);
 				
-				p.sendMessage(ChatColor.GREEN + "Successful Upgrade " + is.getItemMeta().getDisplayName());
+				p.sendMessage(ChatColor.GREEN + "SUCCESSFUL UPGRADE! " + is.getItemMeta().getDisplayName());
 				p.sendMessage(ChatColor.GRAY + "(" + min + "-" + max + ") " + "==>" + " " + ChatColor.WHITE + "(" + amin + "-" + amax + ")" );
 				//Give back to player
 				p.getInventory().addItem(is);
@@ -151,6 +166,18 @@ public class Methods {
 			}
 		}
 		return null;
+	}
+	
+	public String getColor(int level){
+		if(level <= 3){
+			return ChatColor.WHITE + "";
+		}else if(level <= 6){
+			return ChatColor.YELLOW + "";
+		}else if(level <= 9){
+			return ChatColor.GOLD + "";
+		}else{
+			return ChatColor.RED + "";
+		}
 	}
 	
 }

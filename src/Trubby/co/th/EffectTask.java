@@ -26,7 +26,6 @@ public class EffectTask extends BukkitRunnable{
 		this.count = (short) (this.count + 1);
 		
 		}else{
-			Bukkit.broadcastMessage("end");
 			Methods.upgrade(inv, p);
 			p.closeInventory();
 			
