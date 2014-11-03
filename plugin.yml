@@ -1,6 +1,6 @@
 name: Upgrade
 author: tub
-main: Trubby.co.th.main
+main: Trubby.co.th.Upgrade
 description: Upgrade!
 version: 1.0
 commands:
