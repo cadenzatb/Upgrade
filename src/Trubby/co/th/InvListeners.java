@@ -9,8 +9,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType.SlotType;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitTask;
+
+import Trubby.co.th.Util.Utils;
 
 public class InvListeners implements Listener{
 	
@@ -29,11 +34,20 @@ public class InvListeners implements Listener{
 				//not empty
 				if(e.getInventory().getItem(0) == null || e.getInventory().getItem(1) == null)return;
 				
-				//not upgrading
+				//player not in upgrading
 				if(Upgrade.upgrading.contains(p.getName()))return;
 				
-				//real iron and emerald
-				if(e.getInventory().getItem(0).getType() == Material.IRON_SWORD && e.getInventory().getItem(1).getType() == Material.EMERALD){
+				//real weapon & upgrade material
+				if(isUpgradeable(e.getInventory().getItem(0)) && isUpgradeMat(e.getInventory().getItem(1))){
+					
+					ItemStack mat = e.getInventory().getItem(1);
+					int matAmount = mat.getAmount();
+					if(matAmount > 1){
+						mat.setAmount(matAmount - 1);
+						p.getInventory().addItem(mat);
+						mat.setAmount(1);
+						e.getInventory().setItem(1, mat);
+					}
 					
 					Furnace furnace = (Furnace) e.getInventory().getHolder();
 					
@@ -64,6 +78,51 @@ public class InvListeners implements Listener{
 		}else{
 			return;
 		}
+	}
+	
+	@EventHandler
+	public void onCloseInv(InventoryCloseEvent e){
+		Player p = (Player) e.getPlayer();
+		if(e.getInventory().getName().startsWith(ChatColor.RED + "" + ChatColor.BOLD + "UPGRADE")){
+			
+			if(Upgrade.upgrading.contains(p.getName())){
+				return;
+			}
+			//return item slot 0
+			if(e.getInventory().getItem(0) != null){
+				p.getWorld().dropItem(p.getEyeLocation(), e.getInventory().getItem(0));
+			}
+			//return item slot 1
+			if(e.getInventory().getItem(1) != null){
+				p.getWorld().dropItem(p.getEyeLocation(), e.getInventory().getItem(1));
+			}
+			
+		}
+	}
+	
+	public boolean isUpgradeable(ItemStack is){
+		if(!(is.getType() == Material.WOOD_SWORD || is.getType() == Material.GOLD_SWORD || is.getType() == Material.IRON_SWORD || is.getType() == Material.DIAMOND_SWORD))return false;
+		
+		if(is.hasItemMeta()){
+			ItemMeta im = is.getItemMeta();
+			if(im.hasLore()){
+				for(String s : im.getLore()){
+					if(s.startsWith(ChatColor.GRAY + "Damage")){
+						return true;
+					}
+				}
+			}
+		}
+		
+		return false;
+	}
+	
+	public boolean isUpgradeMat(ItemStack is){
+		if(is.getType() == Material.EMERALD){
+			return true;
+		}
+		
+		return false;
 	}
 
 }

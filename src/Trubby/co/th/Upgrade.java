@@ -14,6 +14,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import Trubby.co.th.Util.Chance;
+
 public class Upgrade extends JavaPlugin implements Listener{
 
 	public static Upgrade instance;
@@ -32,11 +34,23 @@ public class Upgrade extends JavaPlugin implements Listener{
 		Bukkit.getPluginManager().registerEvents(new InvListeners(), this);
 		
 		ItemMeta im = accept_anvil.getItemMeta();
-		im.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + "UPGRADE ACCEPT" + ChatColor.GRAY + " (Click)");
+		im.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + "UPGRADE" + ChatColor.WHITE + " (Click)");
 		accept_anvil.setItemMeta(im);
 		
 		instance = this;
 		chance = new Chance();
+	}
+	
+	/**
+	 *	 >>>>>>>>	DISABLE   <<<<<<<<
+	 */
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	public void onDisable() {
+		for(Player p : Bukkit.getOnlinePlayers()){
+			p.closeInventory();
+		}
 	}
 	
 	

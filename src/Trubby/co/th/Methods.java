@@ -15,6 +15,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import Trubby.co.th.Util.Color;
+import Trubby.co.th.Util.Utils;
+
 public class Methods {
 	
 	public static void openFurnace(Player p){
@@ -50,7 +53,7 @@ public class Methods {
 			return;
 		}
 		
-		if(inv.getItem(0).getType() == Material.IRON_SWORD && inv.getItem(1).getType() == Material.EMERALD){
+		if(isUpgradeable(inv.getItem(0)) && isUpgradeMat(inv.getItem(1))){
 			
 			inv.setItem(2, new ItemStack(Upgrade.instance.accept_anvil));
 			Utils.Debug(p, "set");
@@ -98,20 +101,24 @@ public class Methods {
 			if(is.getItemMeta().hasLore()){
 				
 				//Check old upgrade
-				int oldUp = 1;
+				int oldUp = 0;
+				int newUp = 1;
 				
 				if(is.getItemMeta().getDisplayName().contains("+")){
-					oldUp = oldUp + Integer.parseInt(is.getItemMeta().getDisplayName().split(ChatColor.YELLOW + "")[1].replace("+", "").replace(" ", ""));
+					
+					//oldUp = Integer.parseInt(is.getItemMeta().getDisplayName().split(Color.getColor(oldUp) + "")[1].replace("+", "").replace(" ", ""));
+					oldUp = Integer.parseInt(is.getItemMeta().getDisplayName().split("+")[1]);
+					newUp = oldUp + newUp;
 				}
 				
 				
 				/** FAILED UPGRADE **/
-				if(!Upgrade.chance.getChance(oldUp)){
+				if(!Upgrade.chance.getChance(newUp)){
 					
 					p.playSound(p.getLocation(), Sound.ANVIL_LAND, 0.7f, 0.7f);
 					p.playSound(p.getLocation(), Sound.ITEM_BREAK, 1f, 1f);
 					
-					p.sendMessage(ChatColor.RED + "FAILED UPGRADE! " + is.getItemMeta().getDisplayName());
+					p.sendMessage(ChatColor.RED + "\u2718 FAILED UPGRADE. " + ChatColor.YELLOW + "BREAK");
 					return null;
 				}
 				
@@ -145,11 +152,11 @@ public class Methods {
 				im.setLore(lore);
 				
 				//Delete and Add +
-				if(oldUp > 1){
-					im.setDisplayName(im.getDisplayName().replace(ChatColor.YELLOW + " +" + (oldUp - 1), "")
-							+ ChatColor.YELLOW + " +" + oldUp);
+				if(newUp > 1){
+					im.setDisplayName(im.getDisplayName().replace(Color.getColor(oldUp) + " +" + (oldUp), "")
+							+ Color.getColor(newUp) + " +" + newUp);
 				}else{
-					im.setDisplayName(im.getDisplayName() + ChatColor.YELLOW + " +" + oldUp);
+					im.setDisplayName(im.getDisplayName() + Color.getColor(newUp) + " +" + newUp);
 				}
 				
 				//Done
@@ -158,8 +165,8 @@ public class Methods {
 				p.playSound(p.getLocation(), Sound.LEVEL_UP, 1f, 1f);
 				p.playSound(p.getLocation(), Sound.ANVIL_LAND, 0.7f, 1f);
 				
-				p.sendMessage(ChatColor.GREEN + "SUCCESSFUL UPGRADE! " + is.getItemMeta().getDisplayName());
-				p.sendMessage(ChatColor.GRAY + "(" + min + "-" + max + ") " + "==>" + " " + ChatColor.WHITE + "(" + amin + "-" + amax + ")" );
+				p.sendMessage(ChatColor.GREEN + "\u2714 SUCCESSFUL UPGRADE. " + Color.getColor(newUp) + "+" +newUp);
+				p.sendMessage(ChatColor.GRAY + "(" + min + "-" + max + ") " + ChatColor.DARK_GRAY + "\u27b2" + " " + ChatColor.WHITE + "(" + amin + "-" + amax + ")" );
 				//Give back to player
 				p.getInventory().addItem(is);
 				
@@ -180,4 +187,28 @@ public class Methods {
 		}
 	}
 	
+	public static boolean isUpgradeable(ItemStack is){
+		if(!(is.getType() == Material.WOOD_SWORD || is.getType() == Material.GOLD_SWORD || is.getType() == Material.IRON_SWORD || is.getType() == Material.DIAMOND_SWORD))return false;
+		
+		if(is.hasItemMeta()){
+			ItemMeta im = is.getItemMeta();
+			if(im.hasLore()){
+				for(String s : im.getLore()){
+					if(s.startsWith(ChatColor.GRAY + "Damage")){
+						return true;
+					}
+				}
+			}
+		}
+		
+		return false;
+	}
+	
+	public static boolean isUpgradeMat(ItemStack is){
+		if(is.getType() == Material.EMERALD){
+			return true;
+		}
+		
+		return false;
+	}
 }

@@ -1,6 +1,8 @@
-package Trubby.co.th;
+package Trubby.co.th.Util;
 
 import org.bukkit.entity.Player;
+
+import Trubby.co.th.Upgrade;
 
 public class Utils {
 

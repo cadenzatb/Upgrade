@@ -1,6 +1,5 @@
 package Trubby.co.th;
 
-import org.bukkit.Bukkit;
 import org.bukkit.block.Furnace;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -27,8 +26,8 @@ public class EffectTask extends BukkitRunnable{
 		
 		}else{
 			Methods.upgrade(inv, p);
-			p.closeInventory();
 			
+			p.closeInventory();
 			Upgrade.upgrading.remove(p.getName());
 			this.cancel();
 		}
