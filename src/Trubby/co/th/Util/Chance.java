@@ -3,12 +3,15 @@ package Trubby.co.th.Util;
 import java.util.ArrayList;
 import java.util.Random;
 
+import org.bukkit.Bukkit;
+
 public class Chance {
 
 	ArrayList<Integer> chance = new ArrayList<>();
 	Random ran = new Random();
 	
 	public Chance(){
+		/*+0*/ chance.add(100);
 		/*+1*/ chance.add(100);
 		/*+2*/ chance.add(100);
 		/*+3*/ chance.add(80);
@@ -27,8 +30,11 @@ public class Chance {
 	}
 	
 	public boolean getChance(int level){
-		
-		if(ran.nextInt(100) <= chance.get(level)){
+		int random = ran.nextInt(100);
+		Bukkit.broadcastMessage(""+random);
+		Bukkit.broadcastMessage("" +level);
+		Bukkit.broadcastMessage("" +chance.get(level));
+		if(random <= chance.get(level)){
 			return true;
 		}else{
 			return false;

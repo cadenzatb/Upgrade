@@ -66,6 +66,8 @@ public class InvListeners implements Listener{
 			
 			else if(e.getSlotType() == SlotType.CRAFTING || e.getSlotType() == SlotType.FUEL){
 				
+				if(Upgrade.upgrading.contains(p.getName())){e.setCancelled(true); return;}
+				
 				Bukkit.getScheduler().scheduleSyncDelayedTask(Upgrade.instance, new Runnable() {
 					@Override
 					public void run() {

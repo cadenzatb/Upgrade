@@ -2,6 +2,7 @@ package Trubby.co.th;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -35,6 +36,16 @@ public class Upgrade extends JavaPlugin implements Listener{
 		
 		ItemMeta im = accept_anvil.getItemMeta();
 		im.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + "UPGRADE" + ChatColor.WHITE + " (Click)");
+		List<String> lore = new ArrayList<String>();
+		lore.add(ChatColor.GRAY + "" + ChatColor.ITALIC + "Are you sure?");
+		lore.add(ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "+1 > 100%");
+		lore.add(ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "+2 > 100%");
+		lore.add(ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "+3 > 80%");
+		lore.add(ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "+4 > 80%");
+		lore.add(ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "+5 > 70%");
+		lore.add(ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "+6 > 60%");
+		lore.add(ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "+7 > 50%");
+		im.setLore(lore);
 		accept_anvil.setItemMeta(im);
 		
 		instance = this;
@@ -81,6 +92,16 @@ public class Upgrade extends JavaPlugin implements Listener{
 					p.sendMessage("Debug-mode disable.");
 				}
 					
+			}else if(label.equalsIgnoreCase("test")){
+				
+				Player p = (Player) sender;
+				
+				if(p.getItemInHand().getItemMeta().getDisplayName().contains("+")){
+					p.sendMessage("true");
+					int i = p.getItemInHand().getItemMeta().getDisplayName().indexOf("+");
+					p.sendMessage(""+i);
+					p.sendMessage("" + p.getItemInHand().getItemMeta().getDisplayName().charAt(i+2));
+				}
 			}
 		}
 		return false;

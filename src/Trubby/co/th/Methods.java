@@ -31,7 +31,6 @@ public class Methods {
 		player.openFurnace(furnace);
 	}
 	
-	@SuppressWarnings("deprecation")
 	public static void checkReady(final Inventory inv, final Player p){
 		
 		//if NULL
@@ -94,6 +93,12 @@ public class Methods {
 		
 	}
 	
+	/** 
+	 * 
+	 * 		//////// UPGRADE ///////
+	 * 	
+	 */
+	
 	public static ItemStack upgrade(Inventory inv, Player p){
 		
 		ItemStack is = inv.getItem(0);
@@ -101,13 +106,19 @@ public class Methods {
 			if(is.getItemMeta().hasLore()){
 				
 				//Check old upgrade
-				int oldUp = 0;
+				int oldUp = 1;
 				int newUp = 1;
 				
 				if(is.getItemMeta().getDisplayName().contains("+")){
-					
-					//oldUp = Integer.parseInt(is.getItemMeta().getDisplayName().split(Color.getColor(oldUp) + "")[1].replace("+", "").replace(" ", ""));
-					oldUp = Integer.parseInt(is.getItemMeta().getDisplayName().split("+")[1]);
+					String name = is.getItemMeta().getDisplayName();
+					int i = name.indexOf("+");
+					if(name.length() > i + 2){ // > 9
+						oldUp = Integer.parseInt(""+name.charAt(i + 1) + name.charAt(i + 2));
+						p.sendMessage("true");
+					}else{ // < 9
+						oldUp = Integer.parseInt(""+is.getItemMeta().getDisplayName().charAt(i + 1));
+						p.sendMessage("false");
+					}
 					newUp = oldUp + newUp;
 				}
 				
@@ -115,8 +126,8 @@ public class Methods {
 				/** FAILED UPGRADE **/
 				if(!Upgrade.chance.getChance(newUp)){
 					
-					p.playSound(p.getLocation(), Sound.ANVIL_LAND, 0.7f, 0.7f);
 					p.playSound(p.getLocation(), Sound.ITEM_BREAK, 1f, 1f);
+					//p.playSound(p.getLocation(), Sound.ANVIL_LAND, 0.7f, 0.7f);
 					
 					p.sendMessage(ChatColor.RED + "\u2718 FAILED UPGRADE. " + ChatColor.YELLOW + "BREAK");
 					return null;
@@ -152,9 +163,8 @@ public class Methods {
 				im.setLore(lore);
 				
 				//Delete and Add +
-				if(newUp > 1){
-					im.setDisplayName(im.getDisplayName().replace(Color.getColor(oldUp) + " +" + (oldUp), "")
-							+ Color.getColor(newUp) + " +" + newUp);
+				if(newUp > 1){										//old									//new
+					im.setDisplayName(im.getDisplayName().replace(Color.getColor(oldUp) + " +" + (oldUp), Color.getColor(newUp) + " +" + newUp));
 				}else{
 					im.setDisplayName(im.getDisplayName() + Color.getColor(newUp) + " +" + newUp);
 				}
