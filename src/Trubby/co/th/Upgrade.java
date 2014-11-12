@@ -78,8 +78,7 @@ public class Upgrade extends JavaPlugin implements Listener{
 				
 				Player p = (Player) sender;
 				
-				Methods.openFurnace(p);
-				
+				p.sendMessage( "Right click Anvil to open upgrading menu.");
 			}else if(label.equalsIgnoreCase("upgrade_debug")){
 				
 				Player p = (Player) sender;

@@ -8,9 +8,11 @@ import org.bukkit.block.Furnace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType.SlotType;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitTask;
@@ -20,6 +22,16 @@ import Trubby.co.th.Util.Utils;
 public class InvListeners implements Listener{
 	
 	@EventHandler
+	public void onInteract(PlayerInteractEvent e){
+		if(e.getAction() == Action.RIGHT_CLICK_BLOCK){
+			if(e.getClickedBlock().getType() == Material.ANVIL){
+				e.setCancelled(true);
+				Methods.openFurnace(e.getPlayer());
+			}
+		}
+	}
+	
+	@EventHandler
 	public void onClickItem(final InventoryClickEvent e){
 		
 		Utils.Debug((Player) e.getWhoClicked(), "click " + e.getSlot() + " " + e.getSlotType());
@@ -27,9 +39,16 @@ public class InvListeners implements Listener{
 			
 			final Player p = (Player) e.getWhoClicked();
 			
+			if(Upgrade.upgrading.contains(p.getName())){
+				e.setCancelled(true);
+				return;
+			}
+		
+			
 			if(e.getSlotType() == SlotType.RESULT){
 				
 				e.setCancelled(true);
+				e.setCursor(new ItemStack(Material.AIR));
 				
 				//not empty
 				if(e.getInventory().getItem(0) == null || e.getInventory().getItem(1) == null)return;
@@ -66,7 +85,7 @@ public class InvListeners implements Listener{
 			
 			else if(e.getSlotType() == SlotType.CRAFTING || e.getSlotType() == SlotType.FUEL){
 				
-				if(Upgrade.upgrading.contains(p.getName())){e.setCancelled(true); return;}
+				if(Upgrade.upgrading.contains(p.getName())){e.setCancelled(true); e.setCursor(new ItemStack(Material.AIR)); return;}
 				
 				Bukkit.getScheduler().scheduleSyncDelayedTask(Upgrade.instance, new Runnable() {
 					@Override

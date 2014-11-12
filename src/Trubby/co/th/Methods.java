@@ -114,10 +114,10 @@ public class Methods {
 					int i = name.indexOf("+");
 					if(name.length() > i + 2){ // > 9
 						oldUp = Integer.parseInt(""+name.charAt(i + 1) + name.charAt(i + 2));
-						p.sendMessage("true");
+						//p.sendMessage("true");
 					}else{ // < 9
 						oldUp = Integer.parseInt(""+is.getItemMeta().getDisplayName().charAt(i + 1));
-						p.sendMessage("false");
+						//p.sendMessage("false");
 					}
 					newUp = oldUp + newUp;
 				}
@@ -148,12 +148,14 @@ public class Methods {
 				//Get min-max damage
 				String damage = text.split(" ")[1];
 				
-				int min = Integer.parseInt(damage.split("-")[0]);
-				int max = Integer.parseInt(damage.split("-")[1]);
+				double min = Integer.parseInt(damage.split("-")[0]);
+				double max = Integer.parseInt(damage.split("-")[1]);
 				
 				//Calculate new damage after upgrade
-				int amin = min + (min/100 * 5);
-				int amax = max + (max/100 * 5);
+				int amin = (int) (min + (min/100 * 10));
+				int amax = (int) (max + (max/100 * 10));
+				
+				
 				
 				//Set lore
 				List<String> lore = is.getItemMeta().getLore();
@@ -176,7 +178,8 @@ public class Methods {
 				p.playSound(p.getLocation(), Sound.ANVIL_LAND, 0.7f, 1f);
 				
 				p.sendMessage(ChatColor.GREEN + "\u2714 SUCCESSFUL UPGRADE. " + Color.getColor(newUp) + "+" +newUp);
-				p.sendMessage(ChatColor.GRAY + "(" + min + "-" + max + ") " + ChatColor.DARK_GRAY + "\u27b2" + " " + ChatColor.WHITE + "(" + amin + "-" + amax + ")" );
+				p.sendMessage(ChatColor.GRAY + "(" + (int) min + "-" + (int) max + ") " + ChatColor.DARK_GRAY + "\u27b2" + " " + ChatColor.WHITE + "(" + amin + "-" + amax + ")" );
+				Bukkit.broadcastMessage(ChatColor.GRAY + "[+] " + ChatColor.WHITE + "" +p.getName() + ChatColor.GRAY + " has successful upgraded " + im.getDisplayName());
 				//Give back to player
 				p.getInventory().addItem(is);
 				

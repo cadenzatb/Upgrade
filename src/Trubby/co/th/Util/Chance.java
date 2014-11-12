@@ -3,8 +3,6 @@ package Trubby.co.th.Util;
 import java.util.ArrayList;
 import java.util.Random;
 
-import org.bukkit.Bukkit;
-
 public class Chance {
 
 	ArrayList<Integer> chance = new ArrayList<>();
@@ -31,9 +29,9 @@ public class Chance {
 	
 	public boolean getChance(int level){
 		int random = ran.nextInt(100);
-		Bukkit.broadcastMessage(""+random);
+		/*Bukkit.broadcastMessage(""+random);
 		Bukkit.broadcastMessage("" +level);
-		Bukkit.broadcastMessage("" +chance.get(level));
+		Bukkit.broadcastMessage("" +chance.get(level));*/
 		if(random <= chance.get(level)){
 			return true;
 		}else{
